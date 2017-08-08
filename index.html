@@ -2,6 +2,8 @@
 	<head>
 		<title>Form Builder</title>
 		<link rel="stylesheet" type="text/css" href="vendor/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="vendor/css/devices.min.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     	<!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -10,6 +12,173 @@
 	</head>
 	<body ng-app="formBuilder" ng-controller="mainCtrl">
 		
+
+		<!-- FORM BUILDER MODULE  BEGINS -->
+		<div class="container">
+			<div class="col-lg-8">
+				<div class="row panel" ng-repeat="field in formInputFields" style="padding-top: 18px;margin-top: 0px !important;">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                             <select class="bootstrap-select select-style" data-width="100%" ng-model="field.type" ng-change="updateThisField(field)">
+                                <option value="{{item}}" ng-repeat="item in inputTypes" ng-if="item == field.type">{{item}}</option>
+                                <option value="{{item}}" ng-repeat="item in inputTypes" ng-if="item != field.type">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="" ng-model="field.name">
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" checked="checked" ng-model="field.req" style="margin-left: 10px;">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" ng-click="editField(field)" class="btn btn-primary btn-icon"><span class="glyphicon glyphicon-ok"></span></button>
+                        <button type="button" ng-click="deleteField(field)" class="btn btn-primary btn-icon"><span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                </div>
+
+
+				 <div id="addfieldContainer" style="margin-top:50px;">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <select class="bootstrap-select select-style" data-width="100%" ng-model="selectedField.type" ng-change="updateSelectedField(selectedField.type)">
+                                    <option value="">Select Input Type</option>
+                                    <option value="{{item}}" ng-repeat="item in inputTypes">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Name" name="" ng-model="selectedField.name" id="formInputName">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" checked="checked" ng-model="selectedField.req" style="margin-left:10px;">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" ng-click="saveField(selectedField)" class="btn btn-primary">ADD</button>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="col-lg-4">
+				<div class="marvel-device iphone5s black" style="width:270px !important;height:425px !important;margin-top: 30px;">
+				    <div class="top-bar"></div>
+				    <div class="sleep"></div>
+				    <div class="volume"></div>
+				    <div class="camera"></div>
+				    <div class="sensor"></div>
+				    <div class="speaker"></div>
+				    <div class="screen" style="background-color: white;height:415px !important;overflow:scroll;">
+				        <!-- Content goes here -->
+				        <div id="formContainer">
+                            <div class="row" ng-repeat="field in formInputFields">
+                                <div class="col-md-12">
+
+                                    <div class="form-group" ng-if="field.type == 'Text'">
+                                        <label class="text-capitalize" style="color:#494949;width:100% !important;text-align:left;margin-left:8px;margin-top:20px;">
+                                        {{field.name}}
+                                        </label>
+                                        <input type="text" class="form-control" name="" style="border:none;">
+                                    </div>
+
+
+                                    <div ng-if="field.type == 'Heading'" style="color: black;text-align: left;background: #dddddd;margin-top: -6px;margin-bottom:20px;padding: 6px 0px 6px 0px;border: 1px solid #ccc;">
+                                        <span style="margin-left:8px;">{{field.name}}</span>
+                                    </div>
+
+
+                                    <div class="form-group" ng-if="field.type == 'Select'">
+                                        <label class="text-capitalize" style="color:#494949;width:100% !important;text-align:left;border-radius: 0% !important;border-bottom: 1px solid #dddddd !important;margin-top:-16px;padding-bottom: 12px;">
+                                        <span style="margin-left:8px;"><b>{{field.name}}</b></span>
+                                        <span class="pull-right">Choose<i class="icon-arrow-down5"></i></span>
+                                        </label>
+                                    </div>
+
+
+                                    <div class="form-group" ng-if="field.type == 'Date'" style="color:#494949;">
+                                        <label class="text-capitalize" style="width:100% !important;text-align:left;border-radius: 0% !important;border-bottom: 1px solid #dddddd !important;padding-left: 8px;">
+                                            <b>{{field.name}}</b>
+                                            <div class="row" style="padding-left: 8px !important;">
+                                                <label>dd/mm/yyyy</label>
+                                            </div>
+                                        </label>
+                                    </div>
+
+
+                                    <div class="form-group" ng-if="field.type == 'Month'" style="color:#494949;">
+                                        <label class="text-capitalize" style="color:#494949;width:100% !important;text-align:left;border-radius: 0% !important;border-bottom: 1px solid #dddddd !important;padding-left: 8px;">
+                                            <b>{{field.name}}</b>
+                                            <div class="row" style="padding-left: 8px !important;">
+                                                <span>------- -----</span>
+                                            </div>
+                                        </label>
+                                    </div>
+
+
+                                    <div class="form-group" ng-if="field.type == 'Checkbox'">
+                                        <label class="text-capitalize" style="color:#494949;width:100% !important;text-align:left;border-radius: 0% !important;border-bottom: 1px solid #dddddd !important;margin-top:10px;">
+                                            <span style="margin-left:8px;"><b>{{field.name}}</b></span>
+                                            <span class="pull-right" style="margin-right: 10px;margin-top: -2px;">
+                                                <!-- Rounded switch -->
+                                                <label class="switch">
+                                                  <input type="checkbox">
+                                                  <div class="slider round"></div>
+                                                </label>
+                                            </span>
+                                        </label>
+                                    </div>
+
+
+                                    <div class="form-group" ng-if="field.type == 'Address'">
+
+                                        <label class="text-capitalize" style="color:#494949;width:100% !important;text-align:left;margin-left:8px;">
+                                        </label>
+                                        <input type="text" class="form-control" name="" style="border: none !important;width: 100% !important;border-radius: 0% !important;border-bottom: 1px solid #dddddd !important;margin-top:-18px;font-size:12px;" placeholder="House No. / Building No.">
+
+                                        <label class="text-capitalize" style="color:#494949;width:100% !important;text-align:left;margin-left:8px;">
+                                        </label>
+                                        <input type="text" class="form-control" name="" style="border: none !important;width: 100% !important;border-radius: 0% !important;border-bottom: 1px solid #dddddd !important;margin-top:-18px;font-size:12px;" placeholder="Street">
+
+                                        <div class="form-group" class="text-capitalize" style="color:#494949;margin-top:-2px;margin-bottom: -2px;">
+                                            <select class="bootstrap-select select-style" id="selectField" data-width="100%" ng-model="indianState" ng-change="indianStateChange(indianState)">
+                                                <option value="">State</option>
+                                                <option class="text-capitalize" ng-repeat="indianState in allIndianStates" value="{{indianState.ID}},{{indianState.Name}}">{{indianState.Name}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" class="text-capitalize" style="color:#494949;margin-bottom: -2px !important;">
+                                            <select class="bootstrap-select select-style" data-width="100%">
+                                                <option value="">City / Area</option>
+                                                <option class="text-capitalize" ng-repeat="item in allCities" value="{{item.city}}">{{item.city}}</option>
+                                            </select>
+                                        </div>
+                                        <label class="text-capitalize" style="color:#494949;width:100% !important;text-align:left;margin-left:8px;">
+                                        </label>
+                                        <input type="text" class="form-control" name="" style="border: none !important;width: 100% !important;border-radius: 0% !important;border-bottom: 1px solid #dddddd !important;margin-top:-18px;font-size:12px;" placeholder="PIN">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ./SHOW FORM CONTAINER -->
+				    </div>
+				    <div class="home"></div>
+				    <div class="bottom-bar"></div>
+				</div>
+			</div>
+		</div>
+		<!-- FORM BUILDER MODULE ENDS -->
+
 		<script type="text/javascript" src="scripts/app.js"></script>
 		<script type="text/javascript" src="scripts/controllers/main.js"></script>
 	</body>

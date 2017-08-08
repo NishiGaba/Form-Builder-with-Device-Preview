@@ -1,0 +1,5 @@
+/*TO HIDE THE SCROLLBAR*/
+
+::-webkit-scrollbar { 
+    display: none !important; 
+}
